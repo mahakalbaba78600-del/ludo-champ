@@ -24,11 +24,15 @@ jobs:
           flutter-version: '3.24.0'
           channel: 'stable'
 
-      - name: Check or Init Flutter
+      - name: Setup Android Project Files
         run: |
-          if [ ! -f "pubspec.yaml" ]; then
-            flutter create --org com.ludochamp.app --project-name ludo_champ .
-          fi
+          mkdir -p /tmp/backup
+          cp pubspec.yaml /tmp/backup/
+          cp -r lib /tmp/backup/
+          flutter create --platforms=android --org com.ludochamp.app --project-name ludo_champ .
+          cp /tmp/backup/pubspec.yaml .
+          cp -r /tmp/backup/lib .
+          flutter pub get
 
       - name: Build Release APK
         run: flutter build apk --release
